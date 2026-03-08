@@ -11,8 +11,7 @@ public class Main {
         Path inputDir = Paths.get(rootDir.toString(), "input");
         Path outputDir = Paths.get(rootDir.toString(), "output");
 
-        folderExists(inputDir);
-        folderExists(outputDir);
+        foldersExist(new Path[]{inputDir, outputDir});
 
         List<Path> fs = Files
                 .list(inputDir)
@@ -46,10 +45,29 @@ public class Main {
     }
 
     /// Check if a folder exists. if not print an error and exit the program
-    private static void folderExists(Path folder)
+    private static void foldersExist(Path[] folders)
     {
-        if (!(Files.exists(folder) && Files.isDirectory(folder))) {
-            System.err.println("Input directory does not exist: " + folder);
+        Boolean exit = false;
+
+        for (var folder : folders) {
+            if (!(Files.exists(folder) && Files.isDirectory(folder))) {
+                System.err.println("Directory does not exist: " + folder);
+                System.err.println("Creating directory...");
+
+                try {
+                    Files.createDirectories(folder);
+                    LogInfo("Directory created: " + folder);
+                } catch (IOException e) {
+                    System.err.println("Error creating directory: " + folder);
+                    e.printStackTrace();
+                }
+
+                exit = true;
+            }
+        }
+
+        if (exit) {
+            System.err.println("Please add your input files to the input directory and run the program again.");
             System.exit(1); // Exit with 1
         }
     }

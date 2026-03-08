@@ -22,7 +22,7 @@ public class Fraction
 
     @Override
     public String toString() {
-        return n +" / "+d;
+        return n +"/"+d;
     }
 
     public static Fraction parse(String s)
